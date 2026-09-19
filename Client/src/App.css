@@ -2,10 +2,13 @@ nav{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
   padding: 1rem 5%;
 }
 nav > div:last-child{
   display: flex;
+  flex-wrap: wrap;  
   gap: 2rem;
 }
 nav > div:first-child{
@@ -53,12 +56,10 @@ nav > div:last-child a:hover{
   font-weight: 800;
 }
 #home > p:first-of-type {
-  max-width: 750px;
   font-size: 1.25rem;
   line-height: 1.6;
 }
 #home > p:nth-of-type(2) {
-  max-width: 650px;
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -111,12 +112,11 @@ nav > div:last-child a:hover{
   margin: 0 0 1rem;
 }
 #problem > p {
-  max-width: 700px;
   line-height: 1.6;
 }
 #problem > div {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -147,12 +147,11 @@ nav > div:last-child a:hover{
   margin: 0 0 1rem;
 }
 #features > p {
-  max-width: 700px;
   line-height: 1.6;
 }
 #features > div {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -183,12 +182,11 @@ nav > div:last-child a:hover{
   margin: 0 0 1rem;
 }
 #how-it-works > p {
-  max-width: 700px;
   line-height: 1.6;
 }
 #how-it-works > div {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 3rem;
   margin-left: auto;
@@ -221,12 +219,11 @@ nav > div:last-child a:hover{
   margin: 0 0 1rem;
 }
 #technology > p {
-  max-width: 700px;
   line-height: 1.6;
 }
 #technology > div {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));  
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -273,6 +270,22 @@ nav > div:last-child a:hover{
 
 
 
+#problem > div,
+#features > div,
+#technology > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+#problem > div > div,
+#features > div > div,
+#technology > div > div {
+  flex: 0 1 calc((100% - 3rem) / 3);
+}
+
+
 footer {
   padding: 3rem 5%;
   text-align: center;
@@ -312,3 +325,60 @@ footer > p:last-of-type {
   font-size: 0.85rem;
   opacity: 0.6;
 }
+
+
+
+@media (max-width: 900px) {
+  #problem > div,
+  #features > div,
+  #technology > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #problem > div > div,
+  #features > div > div,
+  #technology > div > div {
+    flex-basis: calc((100% - 1.5rem) / 2);
+  }
+
+  #how-it-works > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #how-it-works > div > div:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 50%;
+  }
+}
+@media (max-width: 600px) {
+  nav{
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav > div:last-child{
+    justify-content: center;
+    gap: 1rem;
+  }
+  #problem > div,
+  #features > div,
+  #technology > div {
+    grid-template-columns: 1fr;
+  }
+  #problem > div > div,
+  #features > div > div,
+  #technology > div > div {
+    flex-basis: 100%;
+  }
+  #how-it-works > div {
+    grid-template-columns: 1fr;
+  }
+
+  #how-it-works > div > div:last-child {
+    width: 100%;
+  }
+}
+
+
+
