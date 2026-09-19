@@ -1,4 +1,8 @@
-nav{
+/* ================================
+   NAVBAR
+================================ */
+
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,35 +10,44 @@ nav{
   gap: 1rem;
   padding: 1rem 5%;
 }
-nav > div:last-child{
-  display: flex;
-  flex-wrap: wrap;  
-  gap: 2rem;
-}
-nav > div:first-child{
+
+.navbar-brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-nav > div:first-child span:first-child{
+
+.brand-icon {
   font-size: 1.5rem;
 }
-nav > div:first-child span:last-child{
+
+.brand-name {
   font-size: 1.25rem;
   font-weight: 700;
 }
-nav > div:last-child a{
+
+.navbar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.navbar-links a {
   text-decoration: none;
   color: inherit;
   font-weight: 500;
 }
-nav > div:last-child a:hover{
+
+.navbar-links a:hover {
   text-decoration: underline;
 }
 
 
+/* ================================
+   HERO
+================================ */
 
-#home {
+.hero-section {
   min-height: 85vh;
   display: flex;
   flex-direction: column;
@@ -43,94 +56,126 @@ nav > div:last-child a:hover{
   text-align: center;
   padding: 5rem 5%;
 }
-#home > span {
+
+.hero-label {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-#home h1 {
+
+.hero-title {
   margin: 1rem 0;
   font-size: clamp(3rem, 8vw, 6rem);
   line-height: 1;
   font-weight: 800;
 }
-#home > p:first-of-type {
+
+.hero-description {
   font-size: 1.25rem;
   line-height: 1.6;
 }
-#home > p:nth-of-type(2) {
+
+.hero-subdescription {
   font-size: 1rem;
   line-height: 1.6;
 }
-#home > div:first-of-type {
+
+.hero-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-top: 1.5rem;
 }
-#home > div:first-of-type button {
+
+.hero-actions button {
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 600;
+  cursor: pointer;
 }
-#home > div:first-of-type a {
+
+.hero-actions a {
   text-decoration: none;
   font-weight: 600;
 }
-#home > div:nth-of-type(2) {
+
+.hero-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.hero-highlights {
   display: flex;
   gap: 2rem;
   margin-top: 3rem;
 }
-#home > div:nth-of-type(2) > div {
+
+.hero-highlight {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   text-align: left;
 }
-#home > div:nth-of-type(2) strong {
+
+.hero-highlight strong {
   font-size: 1rem;
   font-weight: 700;
 }
-#home > div:nth-of-type(2) span {
+
+.hero-highlight span {
   font-size: 0.85rem;
   opacity: 0.7;
 }
-#home > div:first-of-type button:hover {
-  transform: translateY(-2px);
-}
 
 
+/* ================================
+   REUSABLE SECTION
+================================ */
 
-#problem {
+.section {
   padding: 4rem 5%;
 }
-#problem h2 {
+
+.section-header {
+  margin-bottom: 3rem;
+}
+
+.section-title {
   font-size: 2.5rem;
   margin: 0 0 1rem;
 }
-#problem > p {
+
+.section-description {
   line-height: 1.6;
 }
-#problem > div {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+
+/* ================================
+   REUSABLE CARDS
+================================ */
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
   gap: 1.5rem;
-  margin-top: 3rem;
 }
-#problem > div > div {
+
+.card {
+  flex: 0 1 calc((100% - 3rem) / 3);
   padding: 1.5rem;
   border-radius: 0.75rem;
   border: 1px solid #e5e7eb;
-  min-height: 170px;
 }
-#problem > div > div h3 {
+
+.card-title {
   margin: 0 0 0.75rem;
   font-size: 1.2rem;
 }
-#problem > div > div p {
+
+.card-description {
   margin: 0;
   line-height: 1.6;
   font-size: 0.95rem;
@@ -138,247 +183,148 @@ nav > div:last-child a:hover{
 }
 
 
+/* ================================
+   HOW IT WORKS
+================================ */
 
-#features {
-  padding: 4rem 5%;
-}
-#features h2 {
-  font-size: 2.5rem;
-  margin: 0 0 1rem;
-}
-#features > p {
-  line-height: 1.6;
-}
-#features > div {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-#features > div > div {
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  min-height: 180px;
-}
-#features > div > div h3 {
-  margin: 0 0 0.75rem;
-  font-size: 1.2rem;
-}
-#features > div > div p {
-  margin: 0;
-  line-height: 1.6;
-  font-size: 0.95rem;
-  opacity: 0.75;
-}
-
-
-
-#how-it-works {
-  padding: 4rem 5%;
-}
-#how-it-works h2 {
-  font-size: 2.5rem;
-  margin: 0 0 1rem;
-}
-#how-it-works > p {
-  line-height: 1.6;
-}
-#how-it-works > div {
+.workflow-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 3rem;
-  margin-left: auto;
-  margin-right: auto;
 }
-#how-it-works > div > div {
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  min-height: 220px;
-}
-#how-it-works > div > div h3 {
-  margin: 0 0 0.75rem;
-  font-size: 1.1rem;
-}
-#how-it-works > div > div p {
-  margin: 0;
-  line-height: 1.6;
-  font-size: 0.9rem;
-  opacity: 0.75;
+
+.workflow-card {
+  flex: none;
 }
 
 
+/* ================================
+   CTA
+================================ */
 
-#technology {
-  padding: 4rem 5%;
-}
-#technology h2 {
-  font-size: 2.5rem;
-  margin: 0 0 1rem;
-}
-#technology > p {
-  line-height: 1.6;
-}
-#technology > div {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));  
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-#technology > div > div {
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  min-height: 180px;
-}
-#technology > div > div h3 {
-  margin: 0 0 0.75rem;
-  font-size: 1.2rem;
-}
-#technology > div > div p {
-  margin: 0;
-  line-height: 1.6;
-  font-size: 0.95rem;
-  opacity: 0.75;
-}
-
-
-
-#cta {
+.cta-section {
   padding: 6rem 5%;
   text-align: center;
 }
-#cta h2 {
+
+.cta-section h2 {
   font-size: 2.5rem;
   margin: 0 0 1rem;
 }
-#cta > p {
+
+.cta-section p {
   max-width: 650px;
   margin: 0 auto;
   line-height: 1.6;
   opacity: 0.75;
 }
-#cta button {
+
+.cta-section button {
   margin-top: 2rem;
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 600;
+  cursor: pointer;
 }
 
 
+/* ================================
+   FOOTER
+================================ */
 
-#problem > div,
-#features > div,
-#technology > div {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-#problem > div > div,
-#features > div > div,
-#technology > div > div {
-  flex: 0 1 calc((100% - 3rem) / 3);
-}
-
-
-footer {
+.footer {
   padding: 3rem 5%;
   text-align: center;
 }
-footer > div:first-of-type {
+
+.footer-brand {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
 }
-footer > div:first-of-type strong {
+
+.footer-brand strong {
   font-size: 1.2rem;
   font-weight: 700;
 }
-footer > p:first-of-type {
+
+.footer-description {
   max-width: 500px;
   margin: 1rem auto;
   line-height: 1.6;
   opacity: 0.7;
 }
-footer > div:nth-of-type(2) {
+
+.footer-links {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
-footer > div:nth-of-type(2) a {
+
+.footer-links a {
   text-decoration: none;
   font-weight: 500;
   color: inherit;
 }
-footer > div:nth-of-type(2) a:hover{
+
+.footer-links a:hover {
   text-decoration: underline;
 }
-footer > p:last-of-type {
+
+.footer-copyright {
   margin-top: 2rem;
   font-size: 0.85rem;
   opacity: 0.6;
 }
 
 
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
 
 @media (max-width: 900px) {
-  #problem > div,
-  #features > div,
-  #technology > div {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
-  #problem > div > div,
-  #features > div > div,
-  #technology > div > div {
+  .card {
     flex-basis: calc((100% - 1.5rem) / 2);
   }
 
-  #how-it-works > div {
+  .workflow-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  #how-it-works > div > div:last-child {
+  .workflow-card:last-child {
     grid-column: 1 / -1;
     justify-self: center;
     width: 50%;
   }
 }
+
+
 @media (max-width: 600px) {
-  nav{
+
+  .navbar {
     flex-direction: column;
     align-items: center;
   }
 
-  nav > div:last-child{
+  .navbar-links {
     justify-content: center;
     gap: 1rem;
   }
-  #problem > div,
-  #features > div,
-  #technology > div {
-    grid-template-columns: 1fr;
-  }
-  #problem > div > div,
-  #features > div > div,
-  #technology > div > div {
+
+  .card {
     flex-basis: 100%;
   }
-  #how-it-works > div {
+
+  .workflow-grid {
     grid-template-columns: 1fr;
   }
 
-  #how-it-works > div > div:last-child {
+  .workflow-card:last-child {
     width: 100%;
   }
 }
-
-
-
