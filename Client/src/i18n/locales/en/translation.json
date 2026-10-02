@@ -2,5 +2,16 @@
   "welcome": "Welcome to AgriSentinel",
   "dashboard": "Dashboard",
   "new_report": "New Report",
-  "my_reports": "My Reports"
+  "my_reports": "Recent Crop Reports",
+  "disease_result": "AI Diagnosis Result",
+  "confidence": "Confidence",
+  "treatment": "Treatment Advice",
+  "medicine": "Recommended Medicine / Pesticide",
+  "prevention": "Preventive Measures",
+  "offline_status": "Offline (IDB Active)",
+  "online_status": "Online",
+  "offline_saved": "Report saved offline in IndexedDB. Will sync when online.",
+  "sync_complete": "Reports synchronized successfully",
+  "regional_alert": "Crop Disease Alert",
+  "officer_recommendation": "Officer Recommendation"
 }

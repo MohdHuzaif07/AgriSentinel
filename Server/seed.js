@@ -7,6 +7,8 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import User from './src/models/User.js';
 import Report from './src/models/Report.js';
+import Alert from './src/models/Alert.js';
+import { TREATMENT_KB } from './src/data/treatments.js';
 
 dotenv.config();
 
@@ -21,11 +23,22 @@ const seed = async () => {
 
     await User.deleteMany({});
     await Report.deleteMany({});
+    await Alert.deleteMany({});
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash('password123', salt);
 
-    console.log('🌱 Seeding demo accounts (Officer & Field Worker)...');
+    console.log('🌱 Seeding demo accounts (Admin, Officer & Field Worker)...');
+    
+    const admin = await User.create({
+      name: 'System Admin (Dr. Rajesh)',
+      email: 'admin@example.com',
+      passwordHash,
+      role: 'ADMIN',
+      preferredLanguage: 'en',
+      region: 'National HQ'
+    });
+
     const officer = await User.create({
       name: 'Dr. Anita Sharma (Officer)',
       email: 'officer@example.com',
@@ -44,14 +57,14 @@ const seed = async () => {
       region: 'Coimbatore District'
     });
 
-    console.log('🗺️ Seeding 10 geospatial disease sample reports across India...');
+    console.log('🗺️ Seeding 10 geospatial disease sample reports across India with ML & Treatment KB data...');
     const sampleDiseases = [
-      { crop: 'Tomato', disease: 'Tomato_Late_blight', severity: 'HIGH' },
-      { crop: 'Tomato', disease: 'Tomato_Early_blight', severity: 'MEDIUM' },
-      { crop: 'Potato', disease: 'Potato_Late_blight', severity: 'HIGH' },
-      { crop: 'Potato', disease: 'Potato_Early_blight', severity: 'LOW' },
-      { crop: 'Pepper', disease: 'Pepper_bell_Bacterial_spot', severity: 'MEDIUM' },
-      { crop: 'Tomato', disease: 'Tomato_healthy', severity: 'LOW' }
+      { crop: 'Tomato', disease: 'Tomato_Late_blight', severity: 'HIGH', conf: 0.94 },
+      { crop: 'Tomato', disease: 'Tomato_Early_blight', severity: 'MEDIUM', conf: 0.88 },
+      { crop: 'Potato', disease: 'Potato_Late_blight', severity: 'HIGH', conf: 0.96 },
+      { crop: 'Potato', disease: 'Potato_Early_blight', severity: 'LOW', conf: 0.82 },
+      { crop: 'Pepper', disease: 'Pepper_bell_Bacterial_spot', severity: 'MEDIUM', conf: 0.91 },
+      { crop: 'Tomato', disease: 'Tomato_healthy', severity: 'LOW', conf: 0.98 }
     ];
 
     const baseCoords = [
@@ -71,6 +84,8 @@ const seed = async () => {
     for (let i = 0; i < 10; i++) {
       const sample = sampleDiseases[i % sampleDiseases.length];
       const coords = baseCoords[i % baseCoords.length];
+      const kbData = TREATMENT_KB[sample.disease] || {};
+      const status = i % 3 === 0 ? 'RESOLVED' : i % 2 === 0 ? 'ANALYZED' : 'PENDING';
 
       reports.push({
         reportId: `DEMO_REP_${1000 + i}`,
@@ -81,18 +96,42 @@ const seed = async () => {
         longitude: coords.lng + (Math.random() - 0.5) * 0.1,
         description: `Field inspection notes for ${sample.crop}. Observed symptoms matching ${sample.disease}.`,
         severity: sample.severity,
-        status: i % 3 === 0 ? 'RESOLVED' : i % 2 === 0 ? 'ANALYZED' : 'PENDING'
+        status,
+        disease: status !== 'PENDING' ? sample.disease : undefined,
+        confidence: status !== 'PENDING' ? sample.conf : undefined,
+        treatment: status !== 'PENDING' ? kbData.treatment : undefined,
+        medicine: status !== 'PENDING' ? kbData.medicine : undefined,
+        prevention: status !== 'PENDING' ? kbData.prevention : undefined,
+        officerId: status === 'RESOLVED' ? officer._id : undefined,
+        officerRecommendation: status === 'RESOLVED' ? 'Field visited by Agricultural Officer. Confirmed diagnosis. Follow prescribed chemical schedule strictly.' : undefined,
+        officerMedicine: status === 'RESOLVED' ? 'Copper Oxychloride 50 WP @ 3g/L water' : undefined,
+        officerReviewedAt: status === 'RESOLVED' ? new Date() : undefined
       });
     }
 
     await Report.insertMany(reports);
 
+    console.log('📢 Seeding demo regional outbreak alert from Agricultural Officer...');
+    await Alert.create({
+      officerId: officer._id,
+      officerName: officer.name,
+      title: '🚨 Tomato Late Blight Outbreak Warning',
+      message: 'Active Late Blight hotspot detected in Coimbatore & Salem regions. High humidity forecast. Apply preventive copper spray within 48 hours.',
+      diseaseType: 'Tomato Late Blight',
+      severity: 'HIGH',
+      centerLat: 11.0168,
+      centerLng: 76.9558,
+      radiusKm: 50,
+      targetFarmerIds: [farmer._id]
+    });
+
     console.log('\n=============================================');
     console.log('🎉 Database seeded successfully into MongoDB Atlas!');
     console.log('=============================================');
     console.log('Demo Credentials:');
-    console.log('🌾 Field Worker:        farmer@example.com  / password123');
-    console.log('🗺️ Agricultural Officer: officer@example.com / password123');
+    console.log('🌾 Field Worker / Farmer: farmer@example.com  / password123');
+    console.log('🗺️ Agricultural Officer:  officer@example.com / password123');
+    console.log('⚙️ System Administrator:  admin@example.com   / password123');
     console.log('=============================================\n');
 
     process.exit(0);

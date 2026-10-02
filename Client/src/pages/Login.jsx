@@ -25,7 +25,9 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(user));
 
       // Route based on role
-      if (user.role === 'AGRICULTURAL_OFFICER' || user.role === 'ADMIN') {
+      if (user.role === 'ADMIN') {
+        navigate('/app/admin');
+      } else if (user.role === 'AGRICULTURAL_OFFICER') {
         navigate('/app/officer');
       } else {
         navigate('/app/dashboard');
@@ -102,6 +104,10 @@ const Login = () => {
           <div className="flex justify-between items-center py-0.5">
             <span>🗺️ Officer:</span>
             <code className="bg-slate-200 px-1.5 py-0.5 rounded text-slate-800">officer@example.com / password123</code>
+          </div>
+          <div className="flex justify-between items-center py-0.5">
+            <span>⚙️ Admin:</span>
+            <code className="bg-slate-200 px-1.5 py-0.5 rounded text-slate-800">admin@example.com / password123</code>
           </div>
         </div>
 

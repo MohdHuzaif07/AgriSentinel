@@ -2,5 +2,16 @@
   "welcome": "एग्रीसेंटिनल में आपका स्वागत है",
   "dashboard": "डैशबोर्ड",
   "new_report": "नई रिपोर्ट",
-  "my_reports": "मेरी रिपोर्टें"
+  "my_reports": "हाल की फसल रिपोर्ट",
+  "disease_result": "AI रोग पहचान परिणाम",
+  "confidence": "सटीकता",
+  "treatment": "उपचार सलाह",
+  "medicine": "अनुशंसित दवा / कीटनाशक",
+  "prevention": "रोकथाम के उपाय",
+  "offline_status": "ऑफ़लाइन (IDB सक्रिय)",
+  "online_status": "ऑनलाइन",
+  "offline_saved": "रिपोर्ट ऑफ़लाइन IndexedDB में सुरक्षित है। इंटरनेट आने पर स्वतः सिंक होगी।",
+  "sync_complete": "रिपोर्ट सफलतापूर्वक सिंक हो गई",
+  "regional_alert": "फसल रोग चेतावनी",
+  "officer_recommendation": "कृषि अधिकारी की सिफारिश"
 }

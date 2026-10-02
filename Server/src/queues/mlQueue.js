@@ -31,6 +31,9 @@ const initQueue = async () => {
       }
     });
 
+    // Handle error event cleanly to prevent unhandled rejection
+    connection.on('error', () => {});
+
     // Try to actually connect
     await connection.connect();
     

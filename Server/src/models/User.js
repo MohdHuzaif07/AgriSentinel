@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
     default: 'FIELD_WORKER' 
   },
   preferredLanguage: { type: String, default: 'en' },
-  region: { type: String }
+  region: { type: String },
+  latitude: { type: Number },
+  longitude: { type: Number }
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);

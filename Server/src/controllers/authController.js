@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password, role, preferredLanguage } = req.body;
+    const { name, email, password, role, preferredLanguage, region, latitude, longitude } = req.body;
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -14,7 +14,16 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const user = new User({ name, email, passwordHash, role, preferredLanguage });
+    const user = new User({
+      name,
+      email,
+      passwordHash,
+      role,
+      preferredLanguage,
+      region,
+      latitude,
+      longitude
+    });
     await user.save();
 
     res.status(201).json({ message: 'User registered successfully' });
