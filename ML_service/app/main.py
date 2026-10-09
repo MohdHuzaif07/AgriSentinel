@@ -73,7 +73,7 @@ def read_root():
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict_disease(file: UploadFile = File(...)):
-    if not file.content_type.startswith("image/"):
+    if file.content_type and not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
     
     contents = await file.read()

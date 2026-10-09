@@ -1,0 +1,49 @@
+{
+  "architecture": "ResNet-50",
+  "dataset": "PlantVillage (8 classes)",
+  "classes": [
+    "Tomato_Early_blight",
+    "Tomato_Late_blight",
+    "Tomato_healthy",
+    "Potato_Early_blight",
+    "Potato_Late_blight",
+    "Potato_healthy",
+    "Pepper_bell_Bacterial_spot",
+    "Pepper_bell_healthy"
+  ],
+  "best_val_acc": 0.9896,
+  "total_images": 2398,
+  "train_images": 1919,
+  "val_images": 479,
+  "epochs": 3,
+  "batch_size": 16,
+  "learning_rate": 0.0003,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5202,
+      "train_acc": 0.8489,
+      "val_loss": 0.2085,
+      "val_acc": 0.9332,
+      "time_sec": 4520.8
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.1796,
+      "train_acc": 0.9432,
+      "val_loss": 0.1126,
+      "val_acc": 0.9562,
+      "time_sec": 1790.1
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.0616,
+      "train_acc": 0.9812,
+      "val_loss": 0.0332,
+      "val_acc": 0.9896,
+      "time_sec": 13200.1
+    }
+  ],
+  "checkpoint_path": "C:\\Users\\huzai\\OneDrive\\Desktop\\PROJECTS\\AgriSentinel\\ML_service\\training\\..\\resnet50_plantvillage.pth",
+  "checkpoint_size_mb": 90.04
+}

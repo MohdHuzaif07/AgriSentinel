@@ -1,0 +1,163 @@
+{
+  "overall_accuracy": 0.9562,
+  "total_val_samples": 479,
+  "per_class_metrics": {
+    "Tomato_Early_blight": {
+      "samples": 60,
+      "correct": 58,
+      "accuracy": 0.9667,
+      "precision": 0.9355,
+      "recall": 0.9667,
+      "f1_score": 0.9508
+    },
+    "Tomato_Late_blight": {
+      "samples": 60,
+      "correct": 60,
+      "accuracy": 1.0,
+      "precision": 0.8955,
+      "recall": 1.0,
+      "f1_score": 0.9449
+    },
+    "Tomato_healthy": {
+      "samples": 60,
+      "correct": 60,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "Potato_Early_blight": {
+      "samples": 60,
+      "correct": 49,
+      "accuracy": 0.8167,
+      "precision": 1.0,
+      "recall": 0.8167,
+      "f1_score": 0.8991
+    },
+    "Potato_Late_blight": {
+      "samples": 60,
+      "correct": 54,
+      "accuracy": 0.9,
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1_score": 0.9474
+    },
+    "Potato_healthy": {
+      "samples": 60,
+      "correct": 58,
+      "accuracy": 0.9667,
+      "precision": 0.9508,
+      "recall": 0.9667,
+      "f1_score": 0.9587
+    },
+    "Pepper_bell_Bacterial_spot": {
+      "samples": 59,
+      "correct": 59,
+      "accuracy": 1.0,
+      "precision": 0.9219,
+      "recall": 1.0,
+      "f1_score": 0.9593
+    },
+    "Pepper_bell_healthy": {
+      "samples": 60,
+      "correct": 60,
+      "accuracy": 1.0,
+      "precision": 0.9677,
+      "recall": 1.0,
+      "f1_score": 0.9836
+    }
+  },
+  "confusion_matrix": [
+    [
+      58,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      60,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      60,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      4,
+      2,
+      0,
+      49,
+      0,
+      0,
+      5,
+      0
+    ],
+    [
+      0,
+      3,
+      0,
+      0,
+      54,
+      3,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      58,
+      0,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      59,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      60
+    ]
+  ],
+  "classes": [
+    "Tomato_Early_blight",
+    "Tomato_Late_blight",
+    "Tomato_healthy",
+    "Potato_Early_blight",
+    "Potato_Late_blight",
+    "Potato_healthy",
+    "Pepper_bell_Bacterial_spot",
+    "Pepper_bell_healthy"
+  ],
+  "checkpoint": "C:\\Users\\huzai\\OneDrive\\Desktop\\PROJECTS\\AgriSentinel\\ML_service\\training\\..\\resnet50_plantvillage.pth"
+}
