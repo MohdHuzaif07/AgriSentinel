@@ -3,4 +3,4 @@ node_modules/
 dist/
 uploads/
 *.log
-data/
+/ML_service/data/
