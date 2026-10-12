@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
@@ -8,6 +8,28 @@ import Register from './pages/Register.jsx';
 import ReportForm from './pages/ReportForm.jsx';
 import OfficerDashboard from './pages/OfficerDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+
+// ── Route Title Synchronizer ─────────────────────────────────────────────────
+
+const PageTitleUpdater = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const titles = {
+      '/': 'AgriSentinel — AI Crop Disease Monitoring',
+      '/login': 'Sign In | AgriSentinel',
+      '/register': 'Create Account | AgriSentinel',
+      '/app/dashboard': 'Farmer Dashboard | AgriSentinel',
+      '/app/report': 'New Crop Report | AgriSentinel',
+      '/app/officer': 'Officer GIS Command | AgriSentinel',
+      '/app/admin': 'Admin Console | AgriSentinel'
+    };
+
+    document.title = titles[location.pathname] || 'AgriSentinel — Crop Disease Monitoring';
+  }, [location.pathname]);
+
+  return null;
+};
 
 // ── Protected Route Helpers ──────────────────────────────────────────────────
 
@@ -59,6 +81,7 @@ const AdminRoute = ({ children }) => {
 const App = () => {
   return (
     <BrowserRouter>
+      <PageTitleUpdater />
       <Routes>
         {/* Public Landing Page */}
         <Route path="/" element={<LandingPage />} />
