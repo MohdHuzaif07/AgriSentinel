@@ -8,7 +8,7 @@ const LandingPage = () => {
   return (
     <div className="landing-wrapper min-h-screen transition-colors duration-200">
       {/* Top Navigation */}
-      <nav className="landing-nav">
+      <nav className="landing-nav sticky top-0 z-50">
         <div className="navbar-brand">
           <span className="brand-icon">🌿</span>
           <span className="brand-name">AgriSentinel</span>
