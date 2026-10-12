@@ -6,9 +6,9 @@ import '../App.css';
 
 const LandingPage = () => {
   return (
-    <div className="landing-wrapper min-h-screen transition-colors duration-200">
-      {/* Top Navigation */}
-      <nav className="landing-nav sticky top-0 z-50">
+    <>
+      {/* Top Navigation — outside wrapper so sticky/fixed is never constrained by ancestor */}
+      <nav className="landing-nav">
         <div className="navbar-brand">
           <span className="brand-icon">🌿</span>
           <span className="brand-name">AgriSentinel</span>
@@ -33,6 +33,8 @@ const LandingPage = () => {
         </div>
       </nav>
 
+      {/* Content wrapper — padding-top offsets fixed nav (~70px) */}
+      <div className="landing-wrapper min-h-screen transition-colors duration-200" style={{ paddingTop: '70px' }}>
       <main>
         {/* Hero Section */}
         <section id="home" className="hero-section">
@@ -335,6 +337,7 @@ const LandingPage = () => {
       {/* Floating Back to Top Button */}
       <BackToTop />
     </div>
+    </>
   );
 };
 

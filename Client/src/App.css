@@ -90,8 +90,7 @@ html:not(.dark) .btn-nav-login {
   padding: 1rem 5%;
   background: rgba(15, 23, 42, 0.9);
   border-bottom: 1px solid var(--color-border);
-  position: -webkit-sticky;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
