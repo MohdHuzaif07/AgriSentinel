@@ -4,4 +4,3 @@ dist/
 uploads/
 *.log
 /ML_service/data/
-vercel.json
