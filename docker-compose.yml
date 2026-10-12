@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7.0
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  ml_service:
+    build:
+      context: ./ML_service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+
+  server:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/agrisentinel
+      - REDIS_URL=redis://redis:6379
+      - ML_SERVICE_URL=http://ml_service:8000
+      - CLIENT_URL=http://localhost:5173
+      - JWT_SECRET=supersecretjwtkey_change_in_production
+    depends_on:
+      - mongo
+      - redis
+      - ml_service
+
+volumes:
+  mongo_data:

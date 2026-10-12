@@ -1,18 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "client": {
-      "root": "Client",
-      "framework": "vite"
-    },
-    "ml_service": {
-      "root": "ML_service",
-      "framework": "fastapi"
-    },
-    "server": {
-      "root": "Server",
-      "framework": "express"
+  "buildCommand": "cd Client && npm install && npm run build",
+  "outputDirectory": "Client/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  },
-  "rewrites": []
+  ]
 }

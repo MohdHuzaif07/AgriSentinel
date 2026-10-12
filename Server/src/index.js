@@ -13,19 +13,38 @@ import { startMLWorker } from './queues/mlWorker.js';
 
 dotenv.config();
 
+const configuredOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((u) => u.trim().replace(/\/$/, ''))
+  : ['http://localhost:5173'];
+
+const isOriginAllowed = (origin) => {
+  if (!origin) return true;
+  if (configuredOrigins.includes(origin) || configuredOrigins.includes('*')) return true;
+  if (origin.endsWith('.vercel.app')) return true;
+  if (origin.startsWith('http://localhost:')) return true;
+  return false;
+};
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE']
+    origin: (origin, callback) => callback(null, isOriginAllowed(origin)),
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true
   }
 });
 app.set('io', io);
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
+  },
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));  // Allow base64 images up to 10MB
