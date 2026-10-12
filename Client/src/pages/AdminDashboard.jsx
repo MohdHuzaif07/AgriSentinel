@@ -35,9 +35,9 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="p-8 flex items-center justify-center min-h-64">
-        <div className="text-center text-slate-500">
+        <div className="text-center text-slate-500 dark:text-slate-400">
           <RefreshCw className="w-8 h-8 mx-auto mb-2 animate-spin text-emerald-600" />
-          <p className="text-sm">Loading system analytics...</p>
+          <p className="text-sm font-medium">Loading system analytics...</p>
         </div>
       </div>
     );

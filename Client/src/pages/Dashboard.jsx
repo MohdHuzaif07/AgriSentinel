@@ -240,7 +240,22 @@ const Dashboard = () => {
         </div>
 
         {loading ? (
-          <div className="py-8 text-center text-sm text-gray-500">Loading reports...</div>
+          <div className="py-6 space-y-3">
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-slate-400 py-1">
+              <RefreshCw className="w-4 h-4 animate-spin text-emerald-500" />
+              <span>Loading reports...</span>
+            </div>
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="flex items-center gap-3.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 animate-pulse border border-slate-100 dark:border-slate-800">
+                <div className="w-12 h-12 rounded-lg bg-slate-200 dark:bg-slate-700 flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4" />
+                  <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
+                </div>
+                <div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full" />
+              </div>
+            ))}
+          </div>
         ) : reports.length === 0 ? (
           <div className="py-12 text-center text-gray-400">
             <Camera className="w-10 h-10 mx-auto mb-2 text-gray-300" />

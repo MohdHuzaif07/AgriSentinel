@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Camera, MapPin, Save, CloudUpload, ArrowLeft } from 'lucide-react';
+import { Camera, MapPin, Save, CloudUpload, ArrowLeft, Loader2 } from 'lucide-react';
 import { saveReportLocally } from '../offline/db.js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -167,10 +167,10 @@ const ReportForm = () => {
               <button
                 type="button"
                 onClick={getGPS}
-                className="flex items-center gap-2 px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-xs font-bold transition shadow-sm"
+                className="flex items-center gap-2 px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 active:scale-95 disabled:bg-cyan-400 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer disabled:cursor-not-allowed"
                 disabled={loading}
               >
-                <MapPin className="w-4 h-4" />
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
                 {loading ? 'Locating...' : location ? 'Refresh GPS' : 'Auto-Capture GPS'}
               </button>
               {location && (
@@ -262,9 +262,15 @@ const ReportForm = () => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition duration-200 text-sm"
+            className="w-full flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] disabled:bg-gray-400 text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-sm cursor-pointer disabled:cursor-not-allowed"
           >
-            {navigator.onLine ? <CloudUpload className="w-5 h-5" /> : <Save className="w-5 h-5" />}
+            {submitting ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : navigator.onLine ? (
+              <CloudUpload className="w-5 h-5" />
+            ) : (
+              <Save className="w-5 h-5" />
+            )}
             {submitting
               ? 'Submitting...'
               : navigator.onLine

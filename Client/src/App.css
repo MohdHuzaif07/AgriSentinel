@@ -14,6 +14,70 @@
   --color-text-muted: #94a3b8;
 }
 
+/* Light Theme Variables */
+:root[data-theme="light"],
+html:not(.dark) {
+  --color-bg: #f8fafc;
+  --color-surface: rgba(255, 255, 255, 0.95);
+  --color-surface-elevated: #ffffff;
+  --color-border: rgba(148, 163, 184, 0.25);
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+}
+
+.landing-wrapper {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html:not(.dark) .landing-nav {
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.7);
+}
+
+html:not(.dark) .hero-section {
+  background: radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.08), transparent 60%), #f8fafc;
+}
+
+html:not(.dark) .landing-section {
+  background: #f8fafc;
+}
+
+html:not(.dark) .landing-section.alt-bg {
+  background: #f1f5f9;
+}
+
+html:not(.dark) .hero-highlight {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) .landing-card {
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) .workflow-card {
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) .cta-section {
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08), transparent 70%), #f8fafc;
+}
+
+html:not(.dark) .landing-footer {
+  background: #f1f5f9;
+  border-top: 1px solid rgba(203, 213, 225, 0.7);
+}
+
+html:not(.dark) .btn-nav-login {
+  color: #0f172a;
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.08);
+}
+
 /* ================================
    LANDING PAGE NAVBAR
 ================================ */

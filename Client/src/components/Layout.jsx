@@ -4,6 +4,8 @@ import { Wifi, WifiOff, LogOut, Globe, Home, Camera, Map, User, Shield, Bell } f
 import { useTranslation } from 'react-i18next';
 import { syncPendingReports } from '../offline/syncManager.js';
 import { io } from 'socket.io-client';
+import ThemeToggle from './ThemeToggle.jsx';
+import BackToTop from './BackToTop.jsx';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
@@ -112,12 +114,12 @@ const Layout = () => {
   const isFarmer = user?.role === 'FIELD_WORKER';
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100">
+    <div className="min-h-screen flex flex-col bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* Top App Header */}
-      <header className="bg-slate-900 text-white px-4 md:px-8 py-3.5 shadow-md flex justify-between items-center sticky top-0 z-50">
+      <header className="bg-slate-900/95 backdrop-blur-md text-white px-4 md:px-8 py-3.5 shadow-md flex justify-between items-center sticky top-0 z-50 border-b border-slate-800/80">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2 group">
-            <span className="text-2xl">🌿</span>
+            <span className="text-2xl transition-transform duration-200 group-hover:scale-110">🌿</span>
             <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               AgriSentinel
             </span>
@@ -230,6 +232,9 @@ const Layout = () => {
             </select>
           </div>
 
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* User Role Tag */}
           {user && (
             <div className="hidden lg:flex items-center gap-1.5 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700 text-xs text-slate-300">
@@ -283,6 +288,9 @@ const Layout = () => {
       <main className="flex-1 overflow-auto">
         <Outlet />
       </main>
+
+      {/* Floating Back to Top Button */}
+      <BackToTop />
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle.jsx';
+import BackToTop from '../components/BackToTop.jsx';
 import '../App.css';
 
 const LandingPage = () => {
   return (
-    <div className="bg-slate-900 text-slate-100 min-h-screen">
+    <div className="landing-wrapper min-h-screen transition-colors duration-200">
       {/* Top Navigation */}
       <nav className="landing-nav">
         <div className="navbar-brand">
@@ -21,6 +23,7 @@ const LandingPage = () => {
         </div>
 
         <div className="navbar-cta-group">
+          <ThemeToggle />
           <Link to="/login" className="btn-nav-login">
             Login
           </Link>
@@ -328,6 +331,9 @@ const LandingPage = () => {
           &copy; 2026 AgriSentinel Academic Prototype. All rights reserved.
         </p>
       </footer>
+
+      {/* Floating Back to Top Button */}
+      <BackToTop />
     </div>
   );
 };

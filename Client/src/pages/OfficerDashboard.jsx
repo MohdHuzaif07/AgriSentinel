@@ -169,14 +169,15 @@ const OfficerDashboard = () => {
         <div className="flex gap-2">
           <button
             onClick={() => setShowAlertForm(!showAlertForm)}
-            className="flex items-center gap-2 px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-semibold transition"
+            className="flex items-center gap-2 px-3.5 py-2 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white rounded-xl text-xs font-semibold transition cursor-pointer shadow-sm"
           >
             <Bell className="w-3.5 h-3.5" />
             {showAlertForm ? 'Close Alert' : 'Send Alert'}
           </button>
           <button
             onClick={fetchDashboardData}
-            className="flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
+            disabled={loading}
+            className="flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold transition cursor-pointer disabled:opacity-60 shadow-sm"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh Feed
