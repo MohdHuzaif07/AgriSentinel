@@ -69,7 +69,7 @@ const Login = () => {
               className="w-full px-3.5 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 transition-colors"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="farmer@example.com"
+              placeholder="name@example.com"
               required
             />
           </div>
@@ -81,7 +81,7 @@ const Login = () => {
                 className="w-full px-3.5 py-2.5 pr-11 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 transition-colors"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="password123"
+                placeholder="••••••••"
                 required
               />
               <button

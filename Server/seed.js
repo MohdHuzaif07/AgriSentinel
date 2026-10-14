@@ -13,6 +13,12 @@ import { TREATMENT_KB } from './src/data/treatments.js';
 dotenv.config();
 
 const seed = async () => {
+  if (process.env.NODE_ENV === 'production' || process.env.ALLOW_DEV_SEED !== 'true') {
+    console.warn('⚠️ Seeding is disabled in production to protect real user data.');
+    console.warn('Set ALLOW_DEV_SEED=true in a local development environment if you explicitly want to run this.');
+    process.exit(0);
+  }
+
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/agrisentinel';
   const maskedUri = uri.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@');
 
