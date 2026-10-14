@@ -16,9 +16,7 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
 });
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+import { API_URL, SOCKET_URL } from '../api/client.js';
 
 const OfficerDashboard = () => {
   const [summary, setSummary] = useState({ totalReports: 0, activeCases: 0, highRiskCases: 0, resolvedCases: 0 });
@@ -416,6 +414,11 @@ const OfficerDashboard = () => {
                             {spot.severity}
                           </span>
                         </div>
+                        {spot.imageReference && (spot.imageReference.startsWith('data:image') || spot.imageReference.startsWith('http')) && (
+                          <div className="w-full h-24 my-1.5 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+                            <img src={spot.imageReference} alt="Crop sample" className="w-full h-full object-cover" />
+                          </div>
+                        )}
                         {spot.disease && (
                           <p className="text-xs text-blue-700 font-semibold mb-1">
                             🌿 {spot.disease.replace(/_/g, ' ')}
@@ -481,6 +484,18 @@ const OfficerDashboard = () => {
             </div>
           </div>
 
+          {/* Farmer Uploaded Image Display */}
+          {selectedReport.imageReference && (selectedReport.imageReference.startsWith('data:image') || selectedReport.imageReference.startsWith('http')) && (
+            <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-3 flex flex-col items-center">
+              <span className="text-xs font-semibold text-slate-600 self-start mb-2">📸 Farmer Uploaded Leaf Photo:</span>
+              <img
+                src={selectedReport.imageReference}
+                alt="Farmer crop sample"
+                className="max-h-64 max-w-full rounded-lg object-contain shadow-sm border border-slate-200"
+              />
+            </div>
+          )}
+
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-1">
@@ -541,6 +556,7 @@ const OfficerDashboard = () => {
           <table className="w-full text-xs">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-left">
+                <th className="px-4 py-3 font-semibold">Image</th>
                 <th className="px-4 py-3 font-semibold">Report ID</th>
                 <th className="px-4 py-3 font-semibold">Crop</th>
                 <th className="px-4 py-3 font-semibold">Disease (AI)</th>
@@ -551,49 +567,68 @@ const OfficerDashboard = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {allReports.slice(0, 20).map((rep) => (
-                <tr key={rep.reportId} className="hover:bg-slate-50 transition">
-                  <td className="px-4 py-3 font-mono text-[10px] text-slate-600">{rep.reportId?.slice(0, 18)}...</td>
-                  <td className="px-4 py-3 font-semibold">{rep.cropType}</td>
-                  <td className="px-4 py-3">
-                    {rep.disease
-                      ? <span className="text-blue-700 font-medium">{rep.disease.replace(/_/g, ' ')}</span>
-                      : <span className="text-slate-400 italic">Pending AI</span>}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full font-bold uppercase ${
-                      rep.severity === 'HIGH' ? 'bg-rose-100 text-rose-700'
-                      : rep.severity === 'MEDIUM' ? 'bg-amber-100 text-amber-700'
-                      : 'bg-emerald-100 text-emerald-700'
-                    }`}>
-                      {rep.severity}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={`font-semibold ${
-                      rep.status === 'RESOLVED' ? 'text-emerald-600'
-                      : rep.status === 'ANALYZED' ? 'text-blue-600'
-                      : 'text-amber-600'
-                    }`}>
-                      {rep.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-mono text-[10px] text-slate-500">
-                    {rep.latitude?.toFixed(4)}, {rep.longitude?.toFixed(4)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => {
-                        setSelectedReport(rep);
-                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                      }}
-                      className="text-cyan-600 hover:text-cyan-800 font-bold hover:underline"
-                    >
-                      Review
-                    </button>
+              {filteredReports.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="px-4 py-12 text-center text-slate-400">
+                    <p className="font-semibold text-slate-600 text-sm">No disease reports found</p>
+                    <p className="text-xs text-slate-400 mt-1">Submitted farmer reports matching the active filters will appear here.</p>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredReports.slice(0, 50).map((rep) => (
+                  <tr key={rep.reportId} className="hover:bg-slate-50 transition">
+                    <td className="px-4 py-2">
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
+                        {rep.imageReference && (rep.imageReference.startsWith('data:image') || rep.imageReference.startsWith('http')) ? (
+                          <img src={rep.imageReference} alt="Crop sample" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-base">🌿</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 font-mono text-[10px] text-slate-600">{rep.reportId?.slice(0, 18)}...</td>
+                    <td className="px-4 py-3 font-semibold">{rep.cropType}</td>
+                    <td className="px-4 py-3">
+                      {rep.disease
+                        ? <span className="text-blue-700 font-medium">{rep.disease.replace(/_/g, ' ')}</span>
+                        : <span className="text-slate-400 italic">Pending AI</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-0.5 rounded-full font-bold uppercase ${
+                        rep.severity === 'HIGH' ? 'bg-rose-100 text-rose-700'
+                        : rep.severity === 'MEDIUM' ? 'bg-amber-100 text-amber-700'
+                        : 'bg-emerald-100 text-emerald-700'
+                      }`}>
+                        {rep.severity}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`font-semibold ${
+                        rep.status === 'RESOLVED' ? 'text-emerald-600'
+                        : rep.status === 'ANALYZED' ? 'text-blue-600'
+                        : rep.status === 'FAILED' ? 'text-rose-600'
+                        : 'text-amber-600'
+                      }`}>
+                        {rep.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-mono text-[10px] text-slate-500">
+                      {rep.latitude?.toFixed(4)}, {rep.longitude?.toFixed(4)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => {
+                          setSelectedReport(rep);
+                          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                        }}
+                        className="text-cyan-600 hover:text-cyan-800 font-bold hover:underline"
+                      >
+                        Review
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

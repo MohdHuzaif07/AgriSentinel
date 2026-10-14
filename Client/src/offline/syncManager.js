@@ -1,7 +1,6 @@
 import { getPendingSyncReports, removeSyncedReport } from './db.js';
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../api/client.js';
 
 export const syncPendingReports = async (token) => {
   if (!navigator.onLine) return;

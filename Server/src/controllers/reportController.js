@@ -5,9 +5,10 @@ import { processMLForReport } from '../queues/mlWorker.js';
 
 export const createReport = async (req, res) => {
   try {
-    const { reportId, cropType, latitude, longitude, description, severity } = req.body;
-    // Accept base64 image or URL reference
-    const imageReference = req.body.imageReference || 'dummy_image.jpg'; 
+    const { reportId, cropType, latitude, longitude, description, severity, imageReference } = req.body;
+    if (!imageReference || typeof imageReference !== 'string' || imageReference.length < 20 || imageReference === 'dummy_image.jpg') {
+      return res.status(400).json({ message: 'A valid crop leaf image is required to submit a report' });
+    }
 
     const existingReport = await Report.findOne({ reportId });
     if (existingReport) {
@@ -149,11 +150,37 @@ export const getAllReportsForMap = async (req, res) => {
       latitude: { $exists: true },
       longitude: { $exists: true }
     })
-      .select('reportId cropType latitude longitude severity status disease confidence createdAt userId')
+      .select('reportId cropType latitude longitude severity status disease confidence imageReference createdAt userId')
       .sort({ createdAt: -1 });
 
     res.json(reports);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+/**
+ * POST /api/reports/:id/analyze
+ * Manually trigger or retry AI diagnosis for a report
+ */
+export const analyzeReport = async (req, res) => {
+  try {
+    const report = await Report.findOne({ reportId: req.params.id });
+    if (!report) return res.status(404).json({ message: 'Report not found' });
+
+    // Authorization: owner, officer, or admin
+    if (req.user.role === 'FIELD_WORKER' && report.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Not authorized to analyze this report' });
+    }
+
+    if (!report.imageReference) {
+      return res.status(400).json({ message: 'No image found for this report to analyze' });
+    }
+
+    const io = req.app.get('io');
+    const result = await processMLForReport(report.reportId, report.imageReference, io);
+    res.json({ message: 'Analysis completed successfully', result });
+  } catch (err) {
+    res.status(500).json({ message: 'AI Analysis failed', error: err.message });
   }
 };

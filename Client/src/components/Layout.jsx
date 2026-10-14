@@ -6,8 +6,7 @@ import { syncPendingReports } from '../offline/syncManager.js';
 import { io } from 'socket.io-client';
 import ThemeToggle from './ThemeToggle.jsx';
 import BackToTop from './BackToTop.jsx';
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+import { SOCKET_URL } from '../api/client.js';
 
 const Layout = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);

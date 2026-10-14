@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Shield, Users, Activity, AlertTriangle, CheckCircle2, Clock, RefreshCw, BarChart3, Bell } from 'lucide-react';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../api/client.js';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);

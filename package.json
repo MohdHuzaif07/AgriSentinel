@@ -1,0 +1,22 @@
+{
+  "name": "agrisentinel-monorepo",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "cd Client && npm install && npm run build",
+    "start": "cd Server && npm start",
+    "dev:client": "cd Client && npm run dev",
+    "dev:server": "cd Server && npm run dev"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "form-data": "^4.0.6",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.2",
+    "node-fetch": "^3.3.2"
+  }
+}

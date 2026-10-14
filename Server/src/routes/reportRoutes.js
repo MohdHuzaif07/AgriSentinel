@@ -1,5 +1,5 @@
 import express from 'express';
-import { createReport, getReports, getReportById, addOfficerRecommendation, getAllReportsForMap } from '../controllers/reportController.js';
+import { createReport, getReports, getReportById, addOfficerRecommendation, getAllReportsForMap, analyzeReport } from '../controllers/reportController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -18,6 +18,9 @@ router.get('/', getReports);
 
 // GET single report by reportId
 router.get('/:id', getReportById);
+
+// POST trigger or retry AI diagnosis on report
+router.post('/:id/analyze', analyzeReport);
 
 // PATCH officer recommendation on a specific report
 router.patch('/:id/recommend', authorize('AGRICULTURAL_OFFICER', 'ADMIN'), addOfficerRecommendation);

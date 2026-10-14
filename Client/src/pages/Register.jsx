@@ -3,8 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import ThemeToggle from '../components/ThemeToggle.jsx';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../api/client.js';
 
 const Register = () => {
   const [formData, setFormData] = useState({

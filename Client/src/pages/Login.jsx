@@ -3,8 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import ThemeToggle from '../components/ThemeToggle.jsx';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../api/client.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -113,23 +112,7 @@ const Login = () => {
           </Link>
         </div>
 
-        <div className="mt-4 p-3.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-gray-600 dark:text-slate-400 space-y-1.5">
-          <p className="font-bold text-gray-700 dark:text-slate-200">Demo Credentials (after seeding DB):</p>
-          <div className="flex justify-between items-center py-0.5">
-            <span>🌾 Field Worker:</span>
-            <code className="bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">farmer@example.com / password123</code>
-          </div>
-          <div className="flex justify-between items-center py-0.5">
-            <span>🗺️ Officer:</span>
-            <code className="bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">officer@example.com / password123</code>
-          </div>
-          <div className="flex justify-between items-center py-0.5">
-            <span>⚙️ Admin:</span>
-            <code className="bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">admin@example.com / password123</code>
-          </div>
-        </div>
-
-        <div className="mt-4 text-center">
+        <div className="mt-6 text-center">
           <Link to="/" className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-slate-300">
             ← Back to Landing Page
           </Link>

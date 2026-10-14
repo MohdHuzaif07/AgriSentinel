@@ -10,7 +10,7 @@ const reportSchema = new mongoose.Schema({
   locationMetadata: { type: Object },
   description: { type: String },
   severity: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH'], default: 'LOW' },
-  status: { type: String, enum: ['PENDING', 'ANALYZED', 'RESOLVED'], default: 'PENDING' },
+  status: { type: String, enum: ['PENDING', 'ANALYZED', 'RESOLVED', 'FAILED'], default: 'PENDING' },
   syncStatus: { type: String, enum: ['SYNCED'], default: 'SYNCED' }, // From server perspective, it's synced if it's here
 
   // ML Prediction Results

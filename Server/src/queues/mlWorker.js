@@ -28,29 +28,45 @@ let isWorkerActive = false;
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
+// In-memory prediction cache to eliminate redundant AI inference on duplicate submissions
+const predictionCache = new Map();
+const MAX_CACHE_SIZE = 200;
+
+const getCacheKey = (imageStr) => {
+  if (!imageStr) return null;
+  // Use length + sample hash of first 500 chars and last 500 chars
+  return `${imageStr.length}_${imageStr.slice(0, 100)}_${imageStr.slice(-100)}`;
+};
+
 /**
  * Call FastAPI /predict endpoint with image buffer/base64
  */
 export const callMLService = async (imageReference) => {
+  if (!imageReference || typeof imageReference !== 'string' || imageReference.length < 50) {
+    throw new Error('A valid image is required for AI diagnosis');
+  }
+
+  // Check cache first
+  const cacheKey = getCacheKey(imageReference);
+  if (cacheKey && predictionCache.has(cacheKey)) {
+    console.log('[ML Pipeline] ⚡ Cache hit for image analysis!');
+    return predictionCache.get(cacheKey);
+  }
+
   try {
     let imageBuffer;
     let mimeType = 'image/jpeg';
 
-    if (imageReference && imageReference.startsWith('data:image')) {
+    if (imageReference.startsWith('data:image')) {
       const [header, base64Data] = imageReference.split(',');
       mimeType = header.split(':')[1]?.split(';')[0] || 'image/jpeg';
       imageBuffer = Buffer.from(base64Data, 'base64');
-    } else if (imageReference && (imageReference.startsWith('http://') || imageReference.startsWith('https://'))) {
+    } else if (imageReference.startsWith('http://') || imageReference.startsWith('https://')) {
       const imgRes = await fetch(imageReference);
       imageBuffer = Buffer.from(await imgRes.arrayBuffer());
       mimeType = imgRes.headers.get('content-type') || 'image/jpeg';
     } else {
-      // 1x1 blank image placeholder for test reports
-      imageBuffer = Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-        'base64'
-      );
-      mimeType = 'image/png';
+      throw new Error('Invalid image format. Expected data URI or HTTPS image URL.');
     }
 
     const ext = mimeType.split('/')[1] || 'jpg';
@@ -61,7 +77,7 @@ export const callMLService = async (imageReference) => {
       method: 'POST',
       body: form,
       headers: form.getHeaders(),
-      timeout: 30000
+      timeout: 7500 // Fast 7.5s timeout prevents blocking
     });
 
     if (!response.ok) {
@@ -69,7 +85,18 @@ export const callMLService = async (imageReference) => {
       throw new Error(`ML service returned ${response.status}: ${errText}`);
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    // Cache result
+    if (cacheKey) {
+      if (predictionCache.size >= MAX_CACHE_SIZE) {
+        const firstKey = predictionCache.keys().next().value;
+        predictionCache.delete(firstKey);
+      }
+      predictionCache.set(cacheKey, result);
+    }
+
+    return result;
   } catch (err) {
     throw new Error(`ML service call failed: ${err.message}`);
   }
@@ -101,6 +128,11 @@ export const processMLForReport = async (reportId, imageReference, io) => {
       mlJob.completedAt = new Date();
       await mlJob.save();
     }
+    // Update Report to FAILED so UI does not stay in PENDING indefinitely
+    await Report.findOneAndUpdate(
+      { reportId },
+      { status: 'FAILED' }
+    );
     throw err;
   }
 

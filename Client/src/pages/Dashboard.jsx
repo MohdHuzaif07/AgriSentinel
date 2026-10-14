@@ -7,8 +7,7 @@ import {
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { getPendingSyncReports } from '../offline/db.js';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../api/client.js';
 
 const Dashboard = () => {
   const [reports, setReports] = useState([]);
@@ -68,6 +67,18 @@ const Dashboard = () => {
     }
   };
 
+  const handleRetryAnalysis = async (reportId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`${API_URL}/reports/${reportId}/analyze`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchReports();
+    } catch (err) {
+      alert('Retry failed: ' + (err.response?.data?.message || err.message));
+    }
+  };
+
   const severityColor = (severity) =>
     severity === 'HIGH' ? 'bg-rose-100 text-rose-700'
     : severity === 'MEDIUM' ? 'bg-amber-100 text-amber-700'
@@ -76,6 +87,7 @@ const Dashboard = () => {
   const statusColor = (status) =>
     status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-700'
     : status === 'ANALYZED' ? 'bg-blue-50 text-blue-700'
+    : status === 'FAILED' ? 'bg-rose-50 text-rose-700'
     : 'bg-amber-50 text-amber-700';
 
   return (
@@ -326,7 +338,6 @@ const Dashboard = () => {
                         <div className="flex items-center gap-2 text-blue-700 font-bold text-xs uppercase tracking-wide">
                           <Leaf className="w-4 h-4" />
                           AI Diagnosis
-                          {rep.isMock && <span className="text-[9px] bg-blue-100 px-1.5 py-0.5 rounded font-medium">DEMO MODE</span>}
                         </div>
                         <p className="font-semibold text-gray-800">{rep.disease.replace(/_/g, ' ')}</p>
                         {rep.confidence && (
@@ -340,6 +351,22 @@ const Dashboard = () => {
                             <span className="text-xs text-gray-600 font-mono">{(rep.confidence * 100).toFixed(1)}%</span>
                           </div>
                         )}
+                      </div>
+                    ) : rep.status === 'FAILED' ? (
+                      <div className="flex items-center justify-between text-rose-700 text-xs bg-rose-50 border border-rose-200 p-2.5 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="w-4 h-4 text-rose-500" />
+                          <span>AI analysis could not complete.</span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRetryAnalysis(rep.reportId);
+                          }}
+                          className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded font-semibold text-[11px] transition"
+                        >
+                          Retry Analysis
+                        </button>
                       </div>
                     ) : (
                       <div className="text-amber-600 text-xs flex items-center gap-2">
