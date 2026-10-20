@@ -166,7 +166,7 @@ const Layout = () => {
                 }`}
               >
                 <Map className="w-4 h-4" />
-                GIS Map
+                {t('gis_map', 'GIS Map')}
               </Link>
             )}
 
@@ -181,7 +181,7 @@ const Layout = () => {
                 }`}
               >
                 <Shield className="w-4 h-4" />
-                Admin
+                {t('admin', 'Admin')}
               </Link>
             )}
           </nav>
@@ -248,11 +248,11 @@ const Layout = () => {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            title="Sign Out"
+            title={t('logout', 'Sign Out')}
             className="flex items-center gap-1 text-xs text-rose-300 hover:text-white bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/50 px-2.5 py-1.5 rounded-lg transition"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Logout</span>
+            <span className="hidden sm:inline">{t('logout', 'Logout')}</span>
           </button>
         </div>
       </header>

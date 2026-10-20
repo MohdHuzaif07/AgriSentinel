@@ -179,12 +179,20 @@ export const addOfficerRecommendation = async (req, res) => {
  */
 export const getAllReportsForMap = async (req, res) => {
   try {
+    const lang = req.query.lang || 'en';
     const reports = await Report.find({
       latitude: { $exists: true },
       longitude: { $exists: true }
     })
-      .select('reportId cropType latitude longitude severity status disease confidence imageReference createdAt userId')
+      .select('reportId cropType latitude longitude severity status disease confidence imageReference createdAt userId treatment medicine prevention')
       .sort({ createdAt: -1 });
+
+    if (lang !== 'en') {
+      const localized = await Promise.all(
+        reports.map(r => localizeReport(r, lang))
+      );
+      return res.json(localized);
+    }
 
     res.json(reports);
   } catch (error) {

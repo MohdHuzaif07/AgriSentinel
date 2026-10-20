@@ -5,8 +5,13 @@ import jwt from 'jsonwebtoken';
 export const register = async (req, res) => {
   try {
     const { name, email, password, role, preferredLanguage, region, latitude, longitude } = req.body;
-    
-    const existingUser = await User.findOne({ email });
+    const cleanEmail = email ? email.trim().toLowerCase() : '';
+
+    if (!cleanEmail || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const existingUser = await User.findOne({ email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') } });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
@@ -15,11 +20,11 @@ export const register = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
 
     const user = new User({
-      name,
-      email,
+      name: name?.trim() || 'User',
+      email: cleanEmail,
       passwordHash,
-      role,
-      preferredLanguage,
+      role: role || 'FIELD_WORKER',
+      preferredLanguage: preferredLanguage || 'en',
       region,
       latitude,
       longitude
@@ -35,8 +40,13 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    const user = await User.findOne({ email });
+    const cleanEmail = email ? email.trim().toLowerCase() : '';
+
+    if (!cleanEmail || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const user = await User.findOne({ email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') } });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -49,7 +59,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET || 'fallback_secret',
-      { expiresIn: '1d' }
+      { expiresIn: '7d' }
     );
 
     res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, language: user.preferredLanguage } });

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { Shield, Users, Activity, AlertTriangle, CheckCircle2, Clock, RefreshCw, BarChart3, Bell } from 'lucide-react';
 import { API_URL } from '../api/client.js';
 
 const AdminDashboard = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState(null);
   const [officers, setOfficers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,14 +51,14 @@ const AdminDashboard = () => {
       <div className="bg-gradient-to-r from-slate-800 to-slate-900 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <span className="text-xs uppercase tracking-widest text-cyan-300 font-bold bg-cyan-950/60 px-2.5 py-1 rounded-full border border-cyan-700/50">
-            System Administrator
+            {t('system_admin', 'System Administrator')}
           </span>
           <h2 className="text-2xl md:text-3xl font-extrabold mt-2 flex items-center gap-2">
             <Shield className="w-7 h-7 text-cyan-400" />
-            AgriSentinel Admin Console
+            {t('admin_console', 'AgriSentinel Admin Console')}
           </h2>
           <p className="text-slate-300 text-sm mt-1">
-            Monitor officer activity, system health, and disease surveillance metrics.
+            {t('admin_subtitle', 'Monitor officer activity, system health, and disease surveillance metrics.')}
           </p>
         </div>
         <button
@@ -64,7 +66,7 @@ const AdminDashboard = () => {
           className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition"
         >
           <RefreshCw className="w-4 h-4" />
-          Refresh
+          {t('refresh_data', 'Refresh')}
         </button>
       </div>
 
@@ -73,7 +75,7 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500">Total Farmers</p>
+              <p className="text-xs font-medium text-slate-500">{t('total_farmers', 'Total Farmers')}</p>
               <p className="text-2xl font-black text-slate-800 mt-1">{stats.totalFarmers}</p>
             </div>
             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
@@ -83,7 +85,7 @@ const AdminDashboard = () => {
 
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500">Officers</p>
+              <p className="text-xs font-medium text-slate-500">{t('total_officers', 'Officers')}</p>
               <p className="text-2xl font-black text-slate-800 mt-1">{stats.totalOfficers}</p>
             </div>
             <div className="p-3 bg-cyan-50 text-cyan-600 rounded-xl">
@@ -93,7 +95,7 @@ const AdminDashboard = () => {
 
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500">Total Reports</p>
+              <p className="text-xs font-medium text-slate-500">{t('total_reports', 'Total Reports')}</p>
               <p className="text-2xl font-black text-slate-800 mt-1">{stats.totalReports}</p>
             </div>
             <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
@@ -103,7 +105,7 @@ const AdminDashboard = () => {
 
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500">Alerts Sent</p>
+              <p className="text-xs font-medium text-slate-500">{t('regional_alert', 'Alerts Sent')}</p>
               <p className="text-2xl font-black text-amber-600 mt-1">{stats.totalAlerts}</p>
             </div>
             <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
