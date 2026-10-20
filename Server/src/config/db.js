@@ -1,7 +1,9 @@
 import dns from 'dns';
 try {
   // Fix Windows querySrv ECONNREFUSED issues for MongoDB Atlas connections
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  if (process.platform === 'win32') {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  }
 } catch (e) {
   // Ignore in environments where setting DNS servers is restricted
 }

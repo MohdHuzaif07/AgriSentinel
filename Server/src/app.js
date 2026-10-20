@@ -16,7 +16,7 @@ const configuredOrigins = process.env.CLIENT_URL
 export const isOriginAllowed = (origin) => {
   if (!origin) return true;
   if (configuredOrigins.includes(origin) || configuredOrigins.includes('*')) return true;
-  if (origin.endsWith('.vercel.app')) return true;
+  if (origin.endsWith('.vercel.app') || origin.endsWith('.onrender.com')) return true;
   if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) return true;
   return false;
 };
