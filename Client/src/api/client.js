@@ -1,19 +1,30 @@
 import axios from 'axios';
 
 // Centralized API configuration:
-// - In production: uses VITE_API_URL if configured and valid, otherwise defaults to '/api' (same-origin on Vercel)
-// - In development: uses VITE_API_URL if configured, otherwise defaults to 'http://localhost:5000/api'
+// - In production (PROD): always use same-origin '/api' unless a valid external HTTPS URL is explicitly provided
+// - In development (DEV): default to 'http://localhost:5000/api'
 const rawApiUrl = import.meta.env.VITE_API_URL?.trim();
-export const API_URL =
-  (rawApiUrl && !rawApiUrl.includes('your-server-url') && !rawApiUrl.includes('example.com'))
-    ? rawApiUrl
-    : (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api');
+
+export const API_URL = (() => {
+  if (import.meta.env.PROD) {
+    if (rawApiUrl && rawApiUrl.startsWith('https://') && !rawApiUrl.includes('your-server-url') && !rawApiUrl.includes('example.com') && !rawApiUrl.includes('localhost')) {
+      return rawApiUrl;
+    }
+    return '/api';
+  }
+  return rawApiUrl || 'http://localhost:5000/api';
+})();
 
 const rawSocketUrl = import.meta.env.VITE_SOCKET_URL?.trim();
-export const SOCKET_URL =
-  (rawSocketUrl && !rawSocketUrl.includes('your-server-url') && !rawSocketUrl.includes('example.com'))
-    ? rawSocketUrl
-    : (import.meta.env.DEV ? 'http://localhost:5000' : (typeof window !== 'undefined' ? window.location.origin : ''));
+export const SOCKET_URL = (() => {
+  if (import.meta.env.PROD) {
+    if (rawSocketUrl && rawSocketUrl.startsWith('https://') && !rawSocketUrl.includes('your-server-url') && !rawSocketUrl.includes('example.com') && !rawSocketUrl.includes('localhost')) {
+      return rawSocketUrl;
+    }
+    return typeof window !== 'undefined' ? window.location.origin : '';
+  }
+  return rawSocketUrl || 'http://localhost:5000';
+})();
 
 const apiClient = axios.create({
   baseURL: API_URL,

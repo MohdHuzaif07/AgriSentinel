@@ -19,3 +19,8 @@ __pycache__/
 Server/.env
 Server/.env.*
 !Server/.env.example
+
+# Client-specific env
+Client/.env
+Client/.env.*
+!Client/.env.example
