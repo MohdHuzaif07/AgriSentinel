@@ -7,12 +7,12 @@ AgriSentinel is a full-stack, offline-first agricultural intelligence platform d
 ## 🌟 Key Features
 
 - **Offline-First PWA**: Capture disease reports even without network connectivity. Reports are securely stored in browser IndexedDB and automatically synchronized when connectivity is restored.
-- **AI-Powered Diagnostics**: Integrated PyTorch ResNet-50 deep learning model trained on the PlantVillage dataset for rapid multi-class crop disease detection.
+- **AI-Powered Diagnostics (Google Gemini Vision API)**: High-speed, multimodal vision analysis using Google Gemini (`gemini-3.5-flash-lite` / `gemini-flash-latest`) for multi-class crop disease detection, treatment advice, and pesticide recommendations, with PyTorch ResNet-50 fallback.
+- **Multilingual AI Translation (Gemini)**: Dynamic translation supporting English, Hindi (हिन्दी), and Tamil (தமிழ்) across farmer reports, officer GIS dashboards, and admin consoles with agricultural domain-specific terminology preservation.
 - **Client-Side Image Optimization**: High-resolution camera photos are automatically compressed via HTML5 Canvas before network transmission, reducing payload size by up to 98% while preserving diagnostic visual features.
 - **Officer GIS Dashboard**: Real-time interactive map (Leaflet) with hotspot clustering, severity filtering, high-resolution original image review, and treatment intervention tracking.
 - **Role-Based Access Control (RBAC)**: Secure JWT authentication supporting `FIELD_WORKER` (Farmer), `AGRICULTURAL_OFFICER`, and `ADMIN` roles.
-- **Multilingual Support**: Internationalization powered by `i18next` with support for English, Hindi, and Tamil.
-- **Modern Responsive UI**: Fully responsive Tailwind CSS interface with Dark / Light theme toggling, sticky navigation, accessible forms, and smooth status feedback.
+- **Modern Responsive UI**: Fully responsive Tailwind CSS interface with Dark / Light theme toggling, accessible forms, and real-time Socket.IO notifications.
 - **Production-Ready Deployment**: Monorepo structure configured for seamless deployment on Vercel (SPA frontend + serverless Express API) and MongoDB Atlas.
 
 ---
@@ -121,14 +121,15 @@ To get started:
 
 ---
 
-## 🧠 Machine Learning & Inference Pipeline
+## 🧠 AI Diagnostic & Multilingual Pipeline
 
-The disease diagnosis engine uses a PyTorch **ResNet-50** deep convolutional neural network trained on agricultural crop leaf datasets.
+AgriSentinel features a dual-layer AI architecture designed for low latency, high diagnostic accuracy, and multi-dialect field accessibility:
 
-- **Classes Identified**: Tomato Late Blight, Tomato Early Blight, Potato Early Blight, Potato Late Blight, Corn Common Rust, Apple Scab, Healthy Crops, and more.
-- **In-Memory Prediction Cache**: Implements an LRU-style prediction cache in the backend worker to deliver near-instantaneous responses for recurring requests.
+- **Primary Diagnostic Engine (Google Gemini Vision API)**: Analyzes crop leaf photos with Google GenAI (`gemini-3.5-flash-lite`), classifying diseases across tomato, potato, corn, pepper, and apple crops with structured severity, confidence scores, and approved pesticide treatments in under 1.5 seconds.
+- **Multilingual Localization Engine (Gemini)**: Translates dynamic diagnoses, treatment advice, and GIS alerts into Hindi and Tamil in real time while preserving critical active chemical ingredient names, dosages, and units.
+- **Resilient Fallback (PyTorch ResNet-50)**: If external API limits are encountered, requests automatically fall back to the self-hosted PyTorch FastAPI microservice (`resnet50_plantvillage.pth`).
+- **In-Memory Prediction Cache**: Implements an LRU cache in the backend worker to deliver near-instantaneous responses for recurring requests.
 - **Client-Side Compression**: Compresses photos to a maximum dimension of 1024px at 85% JPEG quality before uploading, keeping payloads below Vercel's 4.5 MB serverless limit while preserving fine leaf texture details.
-- **Retry Mechanism**: If inference encounters an external timeout, the report is marked as `FAILED`, and the user can trigger immediate re-analysis from their dashboard.
 
 ---
 
@@ -145,7 +146,8 @@ The repository is configured as a monorepo for Vercel deployment:
 Add the following in your Vercel Project Settings > Environment Variables:
 - `MONGODB_URI`: Your MongoDB Atlas URI.
 - `JWT_SECRET`: A cryptographically secure random string.
-- `ML_SERVICE_URL`: URL to your deployed ML microservice (e.g., hosted on Render or Railway).
+- `GEMINI_API_KEY`: Google Gemini API key.
+- `GEMINI_MODEL`: `gemini-3.5-flash-lite` (or `gemini-flash-latest`).
 
 ---
 
