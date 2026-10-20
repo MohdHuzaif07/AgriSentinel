@@ -2,6 +2,7 @@ import Report from '../models/Report.js';
 import MLJob from '../models/MLJob.js';
 import { addMlJob } from '../queues/mlQueue.js';
 import { processMLForReport } from '../queues/mlWorker.js';
+import { localizeReport, translateText } from '../services/translationService.js';
 
 export const createReport = async (req, res) => {
   try {
@@ -76,6 +77,15 @@ export const getReports = async (req, res) => {
     }
 
     const reports = await Report.find(filter).sort({ createdAt: -1 });
+
+    const lang = req.query.lang || req.user?.preferredLanguage;
+    if (lang && ['ta', 'hi'].includes(lang.toLowerCase())) {
+      const localizedReports = await Promise.all(
+        reports.map(r => localizeReport(r, lang))
+      );
+      return res.json(localizedReports);
+    }
+
     res.json(reports);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -94,9 +104,32 @@ export const getReportById = async (req, res) => {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
+    const lang = req.query.lang || req.user?.preferredLanguage;
+    if (lang && ['ta', 'hi'].includes(lang.toLowerCase())) {
+      const localized = await localizeReport(report, lang);
+      return res.json(localized);
+    }
+
     res.json(report);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+/**
+ * POST /api/reports/translate
+ * Translates dynamic agricultural text into target language using Gemini
+ */
+export const translateDynamicText = async (req, res) => {
+  try {
+    const { text, targetLang } = req.body;
+    if (!text || !targetLang) {
+      return res.status(400).json({ message: 'text and targetLang are required' });
+    }
+    const translated = await translateText(text, targetLang);
+    res.json({ original: text, translated, targetLang });
+  } catch (error) {
+    res.status(500).json({ message: 'Translation failed', error: error.message });
   }
 };
 

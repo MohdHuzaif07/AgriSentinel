@@ -24,6 +24,8 @@ services:
       - "8000:8000"
     environment:
       - PORT=8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
 
   server:
     build:
@@ -39,6 +41,8 @@ services:
       - ML_SERVICE_URL=http://ml_service:8000
       - CLIENT_URL=http://localhost:5173
       - JWT_SECRET=supersecretjwtkey_change_in_production
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
     depends_on:
       - mongo
       - redis

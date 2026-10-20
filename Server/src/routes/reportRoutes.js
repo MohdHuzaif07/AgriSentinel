@@ -1,11 +1,22 @@
 import express from 'express';
-import { createReport, getReports, getReportById, addOfficerRecommendation, getAllReportsForMap, analyzeReport } from '../controllers/reportController.js';
+import {
+  createReport,
+  getReports,
+  getReportById,
+  addOfficerRecommendation,
+  getAllReportsForMap,
+  analyzeReport,
+  translateDynamicText
+} from '../controllers/reportController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // All routes require authentication
 router.use(protect);
+
+// POST translate dynamic agricultural text using Gemini
+router.post('/translate', translateDynamicText);
 
 // GET all reports on map (officer/admin only)
 router.get('/map', authorize('AGRICULTURAL_OFFICER', 'ADMIN'), getAllReportsForMap);

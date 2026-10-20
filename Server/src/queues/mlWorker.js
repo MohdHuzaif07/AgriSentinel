@@ -22,6 +22,7 @@ import FormData from 'form-data';
 import Report from '../models/Report.js';
 import MLJob from '../models/MLJob.js';
 import { getTreatmentByDisease } from '../data/treatments.js';
+import { diagnoseWithGemini } from '../services/geminiService.js';
 
 let worker = null;
 let isWorkerActive = false;
@@ -70,6 +71,28 @@ export const callMLService = async (imageReference) => {
     }
 
     const ext = mimeType.split('/')[1] || 'jpg';
+
+    // 1. Prioritize Google Gemini API inference if key is configured
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        console.log('[ML Pipeline] 🌿 Running AI disease classification via Google Gemini API...');
+        const geminiResult = await diagnoseWithGemini(imageReference, mimeType);
+
+        if (cacheKey) {
+          if (predictionCache.size >= MAX_CACHE_SIZE) {
+            const firstKey = predictionCache.keys().next().value;
+            predictionCache.delete(firstKey);
+          }
+          predictionCache.set(cacheKey, geminiResult);
+        }
+
+        return geminiResult;
+      } catch (geminiErr) {
+        console.warn(`[ML Pipeline] Direct Gemini API inference error: ${geminiErr.message}. Attempting ML service fallback...`);
+      }
+    }
+
+    // 2. Call ML Microservice (FastAPI :8000/predict)
     const form = new FormData();
     form.append('file', imageBuffer, { filename: `crop.${ext}`, contentType: mimeType });
 
@@ -77,7 +100,7 @@ export const callMLService = async (imageReference) => {
       method: 'POST',
       body: form,
       headers: form.getHeaders(),
-      timeout: 7500 // Fast 7.5s timeout prevents blocking
+      timeout: 10000
     });
 
     if (!response.ok) {

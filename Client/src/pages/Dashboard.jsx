@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [expandedReport, setExpandedReport] = useState(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,17 +24,21 @@ const Dashboard = () => {
     if (rawUser) {
       try { setUser(JSON.parse(rawUser)); } catch (e) {}
     }
-    fetchReports();
     fetchAlerts();
     loadOfflineReports();
   }, []);
+
+  useEffect(() => {
+    fetchReports();
+  }, [i18n?.language]);
 
   const fetchReports = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const res = await axios.get(`${API_URL}/reports`, {
+      const langParam = i18n?.language ? `?lang=${encodeURIComponent(i18n.language)}` : '';
+      const res = await axios.get(`${API_URL}/reports${langParam}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setReports(res.data || []);
