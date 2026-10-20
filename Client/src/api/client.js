@@ -1,15 +1,19 @@
 import axios from 'axios';
 
 // Centralized API configuration:
-// - In production: uses VITE_API_URL if configured, otherwise defaults to '/api' (same-origin on Vercel)
+// - In production: uses VITE_API_URL if configured and valid, otherwise defaults to '/api' (same-origin on Vercel)
 // - In development: uses VITE_API_URL if configured, otherwise defaults to 'http://localhost:5000/api'
+const rawApiUrl = import.meta.env.VITE_API_URL?.trim();
 export const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api');
+  (rawApiUrl && !rawApiUrl.includes('your-server-url') && !rawApiUrl.includes('example.com'))
+    ? rawApiUrl
+    : (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api');
 
+const rawSocketUrl = import.meta.env.VITE_SOCKET_URL?.trim();
 export const SOCKET_URL =
-  import.meta.env.VITE_SOCKET_URL ||
-  (import.meta.env.DEV ? 'http://localhost:5000' : (typeof window !== 'undefined' ? window.location.origin : ''));
+  (rawSocketUrl && !rawSocketUrl.includes('your-server-url') && !rawSocketUrl.includes('example.com'))
+    ? rawSocketUrl
+    : (import.meta.env.DEV ? 'http://localhost:5000' : (typeof window !== 'undefined' ? window.location.origin : ''));
 
 const apiClient = axios.create({
   baseURL: API_URL,
